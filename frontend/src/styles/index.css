@@ -1,0 +1,220 @@
+:root {
+  --bg-primary: #fffcf5;
+  --bg-secondary: #fff7ed;
+  --bg-card: rgba(255, 255, 255, 0.94);
+  --glass-border: rgba(217, 119, 6, 0.25);
+  --accent-gold: #d97706;
+  --accent-saffron: #ea580c;
+  --accent-vermillion: #dc2626;
+  --accent-maroon: #9f1239;
+  --accent-gradient: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #dc2626 100%);
+  --banner-gradient: linear-gradient(135deg, #fff7ed 0%, #ffedd5 40%, #fef3c7 100%);
+  --gold-gradient: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+  --text-primary: #291e14;
+  --text-secondary: #574435;
+  --text-muted: #8c6e58;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --radius-lg: 16px;
+  --radius-md: 10px;
+  --shadow-glow: 0 10px 25px -5px rgba(234, 88, 12, 0.35);
+  --shadow-card: 0 10px 30px -10px rgba(180, 83, 9, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image:
+    linear-gradient(rgba(255, 252, 245, 0.88), rgba(255, 247, 237, 0.92)),
+    url('/ganpati-pattern-bg.jpg');
+  background-repeat: repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+h1, h2, h3, .font-serif {
+  font-family: var(--font-serif);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Glassmorphism utility for bright theme */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(234, 88, 12, 0.45);
+  box-shadow: 0 14px 35px -5px rgba(217, 119, 6, 0.22);
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--accent-gradient);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: 0 12px 30px -5px rgba(220, 38, 38, 0.45);
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: var(--text-primary);
+  border: 1.5px solid var(--glass-border);
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(180, 83, 9, 0.08);
+}
+
+.btn-secondary:hover {
+  background: #fff7ed;
+  border-color: var(--accent-saffron);
+  color: var(--accent-saffron);
+}
+
+.btn-outline-gold {
+  background: #ffffff;
+  color: var(--accent-saffron);
+  border: 1.5px solid var(--accent-saffron);
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-gold:hover {
+  background: var(--accent-saffron);
+  color: #ffffff;
+}
+
+/* Inputs & Form fields */
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: #ffffff;
+  border: 1.5px solid rgba(217, 119, 6, 0.3);
+  border-radius: var(--radius-md);
+  padding: 0.8rem 1rem;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--accent-saffron);
+  box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.15);
+}
+
+/* Badges */
+.badge-gold {
+  background: #fef3c7;
+  color: var(--accent-maroon);
+  border: 1px solid rgba(217, 119, 6, 0.35);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.badge-ai {
+  background: linear-gradient(135deg, #fef3c7, #ffedd5);
+  color: var(--accent-saffron);
+  border: 1px solid rgba(234, 88, 12, 0.35);
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.badge-status {
+  padding: 0.2rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge-status.Available, .badge-status.Confirmed {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.badge-status.Booked, .badge-status.Pending {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid rgba(217, 119, 6, 0.4);
+}
+
+.badge-status.Completed {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid rgba(14, 165, 233, 0.4);
+}
+
+/* Devotional Header Banner */
+.ganpati-hero-banner {
+  background: linear-gradient(rgba(255, 247, 237, 0.75), rgba(254, 243, 199, 0.85)), url('/ganpati-hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px;
+  border: 2px solid rgba(217, 119, 6, 0.3);
+  box-shadow: var(--shadow-card);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+

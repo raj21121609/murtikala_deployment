@@ -1,0 +1,22 @@
+.env
+*.env
+__pycache__/
+*.pyc
+
+# Databases
+*.db
+murtikala.db
+murtikala_node.db
+
+# Node dependencies & builds
+node_modules/
+dist/
+build/
+
+# Uploads
+uploads/
+static/uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
