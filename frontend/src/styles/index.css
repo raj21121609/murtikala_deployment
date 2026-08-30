@@ -295,10 +295,15 @@ a {
   box-shadow: 0 10px 20px rgba(180, 83, 9, 0.1);
 }
 
+.mobile-nav-menu button {
+  width: 100%;
+  justify-content: flex-start;
+}
+
 .desktop-nav-links {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: clamp(0.5rem, 1.5vw, 1.5rem);
 }
 
 @media (max-width: 768px) {
@@ -310,6 +315,14 @@ a {
 @media (min-width: 769px) {
   .mobile-menu-btn {
     display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 

@@ -26,8 +26,7 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
           gap: '0.4rem',
           fontSize: '0.95rem',
           transition: 'all 0.2s ease',
-          width: '100%',
-          justifyContent: 'flex-start'
+          whiteSpace: 'nowrap'
         }}
       >
         <Search size={16} /> Gallery & AI Search
@@ -48,8 +47,7 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
           gap: '0.4rem',
           fontSize: '0.95rem',
           transition: 'all 0.2s ease',
-          width: '100%',
-          justifyContent: 'flex-start'
+          whiteSpace: 'nowrap'
         }}
       >
         <ShoppingBag size={16} /> Track Booking
@@ -70,8 +68,7 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
             alignItems: 'center',
             gap: '0.4rem',
             fontSize: '0.85rem',
-            width: '100%',
-            justifyContent: 'flex-start'
+            whiteSpace: 'nowrap'
           }}
         >
           <ShieldCheck size={16} /> Admin Portal
@@ -79,8 +76,8 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
       )}
 
       {currentUser ? (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', flexWrap: 'nowrap' }}>
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
             Hi, <strong>{currentUser.full_name || currentUser.email?.split('@')[0] || 'User'}</strong>
           </span>
           <button
@@ -95,7 +92,7 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
         <button
           onClick={() => handleNavClick('auth')}
           className="btn-primary"
-          style={{ padding: '0.55rem 1.2rem', fontSize: '0.85rem', width: 'max-content' }}
+          style={{ padding: '0.55rem 1.2rem', fontSize: '0.85rem', whiteSpace: 'nowrap' }}
         >
           <User size={16} /> Account Sign In
         </button>
@@ -163,7 +160,7 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
         {/* Brand Logo & Name */}
         <div
           onClick={() => handleNavClick('home')}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', cursor: 'pointer' }}
+          style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer', flexShrink: 1, minWidth: 0 }}
         >
           <div style={{
             width: '48px',
@@ -187,14 +184,15 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
           </div>
 
           <div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', flexWrap: 'nowrap' }}>
               <h1 style={{
-                fontSize: 'clamp(1.1rem, 4vw, 1.55rem)',
+                fontSize: 'clamp(1rem, 2vw, 1.55rem)',
                 fontWeight: 900,
                 letterSpacing: '-0.01em',
                 color: '#b91c1c',
                 textShadow: '0 1px 2px rgba(185, 28, 28, 0.15)',
-                margin: 0
+                margin: 0,
+                whiteSpace: 'nowrap'
               }}>
                 श्री गणेश मूर्तिकला
               </h1>
@@ -202,7 +200,7 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
                 G.ART
               </span>
             </div>
-            <span style={{ fontSize: 'clamp(0.6rem, 2vw, 0.75rem)', color: 'var(--text-secondary)', fontWeight: 600, display: 'block' }}>
+            <span style={{ fontSize: 'clamp(0.55rem, 1.5vw, 0.75rem)', color: 'var(--text-secondary)', fontWeight: 600, display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               Shree Ganesh MurtiKala — Uchheli (उच्छेळी)
             </span>
           </div>
@@ -222,10 +220,8 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
             border: 'none',
             color: 'var(--text-primary)',
             padding: '0.5rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
+            marginRight: '0.5rem',
+            cursor: 'pointer'
           }}
           aria-label="Toggle menu"
         >
