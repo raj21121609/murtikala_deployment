@@ -51,7 +51,7 @@ export default function BookingPage({ murtiId, setActivePage, currentUser }) {
 
   if (bookingSuccess) {
     return (
-      <div style={{ maxWidth: '650px', margin: '3rem auto', padding: '0 1.5rem' }}>
+      <div className="section-padding" style={{ maxWidth: '650px', margin: '3rem auto', padding: '0 1.5rem' }}>
         <div className="glass-card animate-fade-in" style={{ padding: '3rem 2rem', textAlign: 'center' }}>
           <CheckCircle2 size={64} color="#4ade80" style={{ margin: '0 auto 1.5rem auto' }} />
           <h1 style={{ fontSize: '2rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
@@ -102,7 +102,7 @@ export default function BookingPage({ murtiId, setActivePage, currentUser }) {
   }
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem 1.5rem' }}>
+    <div className="section-padding" style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem 1.5rem' }}>
       <button
         onClick={() => setActivePage('detail')}
         className="btn-secondary"
@@ -148,7 +148,7 @@ export default function BookingPage({ murtiId, setActivePage, currentUser }) {
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: '1.25rem' }}>
             <div>
               <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.4rem' }}>
                 Email Address *

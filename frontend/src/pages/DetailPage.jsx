@@ -41,7 +41,7 @@ export default function DetailPage({ murtiId, setActivePage, setBookingMurtiId }
     : 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=800&q=80';
 
   return (
-    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '2rem 1.5rem' }}>
+    <div className="section-padding" style={{ maxWidth: '1100px', margin: '0 auto', padding: '2rem 1.5rem' }}>
       <button
         onClick={() => setActivePage('gallery')}
         className="btn-secondary"
@@ -52,7 +52,7 @@ export default function DetailPage({ murtiId, setActivePage, setBookingMurtiId }
 
       <div className="glass-card animate-fade-in" style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
         gap: '2.5rem',
         padding: '2.5rem'
       }}>

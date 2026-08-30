@@ -34,7 +34,7 @@ export default function GalleryPage({ setSelectedMurtiId, setBookingMurtiId, set
   };
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1.5rem' }}>
+    <div className="section-padding" style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1.5rem' }}>
       {/* Header */}
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '2.4rem', color: 'var(--text-primary)', marginBottom: '0.4rem' }}>
@@ -182,7 +182,7 @@ export default function GalleryPage({ setSelectedMurtiId, setBookingMurtiId, set
       ) : (
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))',
           gap: '1.5rem'
         }}>
           {murtis.map((m) => (

@@ -218,3 +218,98 @@ a {
   animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Responsive Utilities */
+@media (max-width: 1024px) {
+  :root {
+    --radius-lg: 14px;
+    --radius-md: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Global scaling for text */
+  html {
+    font-size: 15px;
+  }
+  
+  /* Hero specific text scaling handled via clamp, but we can also set general limits */
+  .hero-title {
+    font-size: clamp(2rem, 8vw, 3.6rem) !important;
+  }
+  .hero-subtitle {
+    font-size: clamp(1rem, 4vw, 1.35rem) !important;
+  }
+  .hero-marathi {
+    font-size: clamp(1rem, 4vw, 1.3rem) !important;
+  }
+  
+  /* Buttons */
+  .btn-primary, .btn-secondary, .btn-outline-gold {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  /* Padding utilities for mobile */
+  .section-padding {
+    padding: 2rem 1rem !important;
+  }
+  .hero-padding {
+    padding: 2rem 1.2rem !important;
+  }
+  .glass-card-mobile {
+    padding: 1.2rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+  
+  .btn-primary, .btn-secondary, .btn-outline-gold {
+    padding: 0.55rem 1rem;
+    font-size: 0.85rem;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  /* Make badges smaller on mobile */
+  .badge-gold, .badge-ai, .badge-status {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
+}
+
+/* Navbar specific mobile classes */
+.mobile-nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 252, 245, 0.98);
+  border-top: 1px solid rgba(217, 119, 6, 0.2);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  box-shadow: 0 10px 20px rgba(180, 83, 9, 0.1);
+}
+
+.desktop-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .desktop-nav-links {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-menu-btn {
+    display: none;
+  }
+}
+

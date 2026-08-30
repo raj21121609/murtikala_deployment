@@ -17,9 +17,9 @@ export default function HomePage({ setActivePage, setSelectedMurtiId, setBooking
   }, []);
 
   return (
-    <div style={{ maxWidth: '1240px', margin: '0 auto', padding: '2rem 1.5rem' }}>
+    <div className="section-padding" style={{ maxWidth: '1240px', margin: '0 auto', padding: '2rem 1.5rem' }}>
       {/* Main Banner matching Shree Ganesh MurtiKala Shop Style with Ganpati Background */}
-      <section className="animate-fade-in" style={{
+      <section className="animate-fade-in hero-padding" style={{
         padding: '3.5rem 2rem',
         borderRadius: '24px',
         textAlign: 'center',
@@ -45,7 +45,7 @@ export default function HomePage({ setActivePage, setSelectedMurtiId, setBooking
         }} />
 
         {/* Spiritual Invocation */}
-        <div style={{
+        <div className="hero-marathi" style={{
           fontSize: '1.4rem',
           fontWeight: 800,
           color: '#9f1239',
@@ -75,7 +75,7 @@ export default function HomePage({ setActivePage, setSelectedMurtiId, setBooking
         </div>
 
         {/* Main Title */}
-        <h1 style={{
+        <h1 className="hero-title" style={{
           fontSize: '3.6rem',
           fontWeight: 900,
           lineHeight: 1.15,
@@ -86,7 +86,7 @@ export default function HomePage({ setActivePage, setSelectedMurtiId, setBooking
           श्री गणेश मूर्तिकला
         </h1>
 
-        <div style={{
+        <div className="hero-subtitle" style={{
           fontSize: '1.35rem',
           fontWeight: 800,
           color: '#ea580c',
@@ -169,7 +169,7 @@ export default function HomePage({ setActivePage, setSelectedMurtiId, setBooking
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))',
           gap: '1.5rem'
         }}>
           <div className="glass-card" style={{ padding: '1.6rem', borderLeft: '5px solid #16a34a' }}>
@@ -227,7 +227,7 @@ export default function HomePage({ setActivePage, setSelectedMurtiId, setBooking
         ) : (
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))',
             gap: '1.5rem'
           }}>
             {featured.map((m) => (
