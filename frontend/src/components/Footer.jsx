@@ -96,7 +96,7 @@ export default function Footer() {
         justifyContent: 'center',
         gap: '0.4rem'
       }}>
-        श्री गणेश मूर्तिकला — Uchheli © 2026. Powered by React, Node.js REST API & Python AI Service.
+        श्री गणेश मूर्तिकला — Uchheli © 2026. Built by InitCodes with <Heart size={14} color="#dc2626" fill="#dc2626" />
       </div>
     </footer>
   );
