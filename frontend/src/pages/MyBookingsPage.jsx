@@ -53,15 +53,14 @@ function getStatusInfo(raw = '') {
 }
 
 // ─── Progress Tracking Bar Component ─────────────────────────────────────────
-function OrderTrackingStepper({ status }) {
-  const info = getStatusInfo(status);
-  const currentStage = info.stage;
+function OrderTrackingStepper({ status = 'pending', createdAt, eventDate }) {
+  const normStatus = (status || '').toLowerCase();
 
-  if (status?.toLowerCase() === 'declined') {
+  if (normStatus === 'declined') {
     return (
       <div style={{
         marginTop: '1.25rem',
-        padding: '0.85rem 1.2rem',
+        padding: '0.85rem 1.25rem',
         borderRadius: '12px',
         background: '#fef2f2',
         border: '1px solid #fecaca',
@@ -72,16 +71,48 @@ function OrderTrackingStepper({ status }) {
         fontSize: '0.85rem'
       }}>
         <XCircle size={18} color="#dc2626" />
-        <span><strong>Status:</strong> This booking request was declined or cancelled. Contact workshop at <strong>7276703163</strong> for assistance.</span>
+        <span><strong>Status:</strong> This booking request was declined or cancelled. Contact workshop at <strong>7276703163</strong> for alternatives.</span>
       </div>
     );
   }
 
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '';
+    try {
+      return new Date(dateStr).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+    } catch {
+      return dateStr;
+    }
+  };
+
+  const isPending = normStatus === 'pending';
+  const isConfirmed = normStatus === 'confirmed';
+  const isCompleted = normStatus === 'completed';
+
   const steps = [
-    { label: 'Request Placed', desc: 'Received online' },
-    { label: 'Artisan Review', desc: 'Availability check' },
-    { label: 'Sculpting & Painting', desc: 'Workshop finishing' },
-    { label: 'Ready for Mandap', desc: 'Pickup / Handover' }
+    {
+      title: 'Request Placed',
+      desc: createdAt ? `Placed on ${formatDate(createdAt)}` : 'Received online',
+      done: true,
+      current: false,
+      icon: Check
+    },
+    {
+      title: isPending ? 'Artisan Review' : 'Booking Approved',
+      desc: isPending ? 'Awaiting workshop review' : 'Confirmed & Reserved',
+      done: isConfirmed || isCompleted,
+      current: isPending,
+      icon: isPending ? Clock : Check
+    },
+    {
+      title: isCompleted ? 'Order Completed' : 'Festival Handover',
+      desc: isCompleted
+        ? 'Delivered / Handed over'
+        : (eventDate ? `Reserved for ${formatDate(eventDate)}` : (isConfirmed ? 'Ready for your event' : 'Scheduled on approval')),
+      done: isCompleted,
+      current: isConfirmed,
+      icon: isCompleted ? Check : (isConfirmed ? CalendarDays : PackageCheck)
+    }
   ];
 
   return (
@@ -92,77 +123,98 @@ function OrderTrackingStepper({ status }) {
       borderRadius: '14px',
       border: '1px solid rgba(217, 119, 6, 0.22)'
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-        <div style={{ fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#9a3412', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-          <Sparkles size={14} color="#ea580c" />
-          Live Booking Progress
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+        <div style={{
+          fontSize: '0.78rem',
+          fontWeight: 800,
+          textTransform: 'uppercase',
+          letterSpacing: '0.08em',
+          color: isConfirmed ? '#15803d' : '#9a3412',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.4rem'
+        }}>
+          {isConfirmed ? (
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#16a34a', display: 'inline-block' }} />
+          ) : (
+            <Sparkles size={14} color="#ea580c" />
+          )}
+          {isPending && 'Live Booking Progress: Review In Progress'}
+          {isConfirmed && 'Live Booking Progress: Approved & Reserved'}
+          {isCompleted && 'Live Booking Progress: Order Completed'}
         </div>
-        <div style={{ fontSize: '0.8rem', color: '#78350f', fontWeight: 600 }}>
-          {info.explanation}
+
+        <div style={{ fontSize: '0.8rem', color: isConfirmed ? '#166534' : '#78350f', fontWeight: 600 }}>
+          {isPending && 'Ganesh & Charit Arekar will confirm workshop availability shortly.'}
+          {isConfirmed && 'Sculpture is reserved! Ready for pickup / delivery on your festival date.'}
+          {isCompleted && 'Sculpture handed over. May Lord Ganesha bless your celebration!'}
         </div>
       </div>
 
-      {/* Stepper Grid */}
+      {/* Stepper Grid (3 clean milestones) */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '0.5rem',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: '0.75rem',
         position: 'relative'
       }}>
         {steps.map((step, idx) => {
-          const stepNum = idx + 1;
-          const isDone = currentStage > stepNum || (currentStage === 4 && stepNum === 4);
-          const isCurrent = currentStage === stepNum && currentStage !== 4;
-          const isUpcoming = currentStage < stepNum;
-
+          const StepIcon = step.icon;
           return (
             <div key={idx} style={{ textAlign: 'center', position: 'relative' }}>
               {/* Connector line */}
-              {idx < 3 && (
+              {idx < 2 && (
                 <div style={{
                   position: 'absolute',
-                  top: '14px',
+                  top: '15px',
                   left: '50%',
                   right: '-50%',
                   height: '3px',
-                  background: isDone ? '#22c55e' : (isCurrent ? '#f59e0b' : '#e5e7eb'),
+                  background: (idx === 0 && (isConfirmed || isCompleted)) || (idx === 1 && isCompleted)
+                    ? '#16a34a'
+                    : (idx === 0 && isPending ? '#f59e0b' : '#e5e7eb'),
                   zIndex: 1,
                   transition: 'background 0.3s ease'
                 }} />
               )}
 
-              {/* Step Icon Badge */}
+              {/* Step Circle Badge */}
               <div style={{
-                width: '30px',
-                height: '30px',
+                width: '32px',
+                height: '32px',
                 borderRadius: '50%',
-                margin: '0 auto 0.4rem',
+                margin: '0 auto 0.45rem',
                 position: 'relative',
                 zIndex: 2,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '0.75rem',
-                fontWeight: 800,
-                background: isDone ? '#16a34a' : (isCurrent ? '#ea580c' : '#ffffff'),
-                color: (isDone || isCurrent) ? '#ffffff' : '#9ca3af',
-                border: isDone ? '2px solid #16a34a' : (isCurrent ? '2px solid #fbbf24' : '2px solid #d1d5db'),
-                boxShadow: isCurrent ? '0 0 0 4px rgba(234, 88, 12, 0.2)' : 'none',
+                background: step.done ? '#16a34a' : (step.current ? '#ea580c' : '#ffffff'),
+                color: (step.done || step.current) ? '#ffffff' : '#9ca3af',
+                border: step.done ? '2px solid #16a34a' : (step.current ? '2px solid #fbbf24' : '2px solid #d1d5db'),
+                boxShadow: step.current ? '0 0 0 4px rgba(234, 88, 12, 0.2)' : 'none',
                 transition: 'all 0.3s ease'
               }}>
-                {isDone ? <Check size={14} strokeWidth={3} /> : stepNum}
+                <StepIcon size={16} strokeWidth={step.done ? 3 : 2.5} />
               </div>
 
-              {/* Step Labels */}
+              {/* Title */}
               <div style={{
-                fontSize: '0.78rem',
-                fontWeight: isCurrent ? 800 : (isDone ? 700 : 500),
-                color: isCurrent ? '#9a3412' : (isDone ? '#15803d' : '#6b7280'),
+                fontSize: '0.82rem',
+                fontWeight: step.current ? 800 : (step.done ? 700 : 500),
+                color: step.current ? '#9a3412' : (step.done ? '#15803d' : '#6b7280'),
                 lineHeight: 1.2
               }}>
-                {step.label}
+                {step.title}
               </div>
-              <div style={{ fontSize: '0.68rem', color: '#9ca3af', marginTop: '0.15rem' }}>
+
+              {/* Description */}
+              <div style={{
+                fontSize: '0.72rem',
+                color: step.current ? '#78350f' : (step.done ? '#166534' : '#9ca3af'),
+                marginTop: '0.2rem',
+                fontWeight: step.current ? 600 : 500
+              }}>
                 {step.desc}
               </div>
             </div>
@@ -426,7 +478,11 @@ function ClassicBookingCard({ booking, murtiData }) {
         </div>
 
         {/* ── Live Visual Progress Tracker ── */}
-        <OrderTrackingStepper status={booking.status} />
+        <OrderTrackingStepper
+          status={booking.status}
+          createdAt={booking.createdAt}
+          eventDate={booking.event_date}
+        />
 
         {/* ── Bottom Action Strip / Workshop Support ── */}
         <div style={{
