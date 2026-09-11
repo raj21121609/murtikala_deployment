@@ -149,11 +149,11 @@ export default function HomePage({ setActivePage, setSelectedMurtiId, setBooking
           </button>
 
           <button
-            onClick={() => setActivePage('track')}
+            onClick={() => setActivePage('mybookings')}
             className="btn-secondary"
             style={{ padding: '0.9rem 2.2rem', fontSize: '1rem' }}
           >
-            Track Existing Booking
+            My Bookings & Orders
           </button>
         </div>
       </section>

@@ -167,6 +167,23 @@ export const bookingApi = {
     }
   },
   
+  getMyBookings: async (email) => {
+    try {
+      const q = query(
+        collection(db, 'bookings'),
+        where('email', '==', email)
+      );
+      const querySnapshot = await getDocs(q);
+      const bookings = querySnapshot.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // newest first, client-side
+      return { data: bookings };
+    } catch (err) {
+      console.error('Firebase getMyBookings Error:', err);
+      throw err;
+    }
+  },
+
   getAllBookings: async () => {
     try {
       const q = query(collection(db, 'bookings'), orderBy('createdAt', 'desc'));

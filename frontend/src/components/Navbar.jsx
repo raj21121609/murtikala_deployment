@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, ShoppingBag, ShieldCheck, User, LogOut, Phone, Instagram, MapPin, Menu, X } from 'lucide-react';
+import { Search, ShoppingBag, ShieldCheck, User, LogOut, Phone, Instagram, MapPin, Menu, X, ClipboardList } from 'lucide-react';
 
 export default function Navbar({ activePage, setActivePage, currentUser, onLogout }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -33,14 +33,14 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
       </button>
 
       <button
-        onClick={() => handleNavClick('track')}
+        onClick={() => handleNavClick('mybookings')}
         style={{
-          background: activePage === 'track' ? '#fef3c7' : 'transparent',
+          background: activePage === 'mybookings' ? '#fef3c7' : 'transparent',
           border: 'none',
           borderRadius: '9999px',
           padding: '0.45rem 0.9rem',
-          color: activePage === 'track' ? '#ea580c' : 'var(--text-primary)',
-          fontWeight: activePage === 'track' ? 700 : 600,
+          color: activePage === 'mybookings' ? '#ea580c' : 'var(--text-primary)',
+          fontWeight: activePage === 'mybookings' ? 700 : 600,
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
@@ -50,7 +50,7 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
           whiteSpace: 'nowrap'
         }}
       >
-        <ShoppingBag size={16} /> Track Booking
+        <ClipboardList size={16} /> My Bookings
       </button>
 
       {currentUser?.role === 'admin' && (

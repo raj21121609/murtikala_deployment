@@ -35,6 +35,11 @@ export default function BookingPage({ murtiId, setActivePage, currentUser }) {
     try {
       const res = await bookingApi.createBooking({
         murti_id: murtiId,
+        murti_name: murti?.name || 'Handcrafted Murti',
+        primary_image: murti?.primary_image || (murti?.images && murti.images[0]) || null,
+        material: murti?.material || '',
+        height_cm: murti?.height_cm || '',
+        price: murti?.price || null,
         ...formData
       });
       setBookingSuccess(res.data);
@@ -58,7 +63,7 @@ export default function BookingPage({ murtiId, setActivePage, currentUser }) {
             Booking Request Received!
           </h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', marginBottom: '2rem' }}>
-            Thank you for booking <strong>{murti?.name}</strong>. Please save your reference code below to track your booking status.
+            Thank you for booking <strong>{murti?.name}</strong>. Your request has been sent directly to the artisans. You can track its live status in your dashboard.
           </p>
 
           <div style={{
@@ -82,12 +87,12 @@ export default function BookingPage({ murtiId, setActivePage, currentUser }) {
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <button
-              onClick={() => setActivePage('track')}
+              onClick={() => setActivePage('mybookings')}
               className="btn-primary"
             >
-              Track Booking Status
+              View in My Bookings
             </button>
             <button
               onClick={() => setActivePage('gallery')}

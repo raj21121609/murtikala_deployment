@@ -8,10 +8,11 @@ import BookingPage from './pages/BookingPage';
 import TrackPage from './pages/TrackPage';
 import AuthPage from './pages/AuthPage';
 import AdminDashboard from './pages/AdminDashboard';
+import MyBookingsPage from './pages/MyBookingsPage';
 import { subscribeToAuthChanges, logoutUser } from './services/firebaseAuth';
 
 export default function App() {
-  const [activePage, setActivePage] = useState('home'); // 'home' | 'gallery' | 'detail' | 'book' | 'track' | 'auth' | 'admin'
+  const [activePage, setActivePage] = useState('home'); // 'home' | 'gallery' | 'detail' | 'book' | 'track' | 'auth' | 'admin' | 'mybookings'
   const [selectedMurtiId, setSelectedMurtiId] = useState(null);
   const [bookingMurtiId, setBookingMurtiId] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
@@ -86,6 +87,13 @@ export default function App() {
         {activePage === 'admin' && (
           <AdminDashboard
             currentUser={currentUser}
+          />
+        )}
+
+        {activePage === 'mybookings' && (
+          <MyBookingsPage
+            currentUser={currentUser}
+            setActivePage={setActivePage}
           />
         )}
       </main>
