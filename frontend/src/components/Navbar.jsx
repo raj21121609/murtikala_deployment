@@ -111,39 +111,35 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
       boxShadow: '0 4px 20px rgba(180, 83, 9, 0.08)'
     }}>
       {/* Top Spiritual Invocation & Contact Bar */}
-      <div style={{
-        background: 'linear-gradient(90deg, #ea580c 0%, #d97706 50%, #dc2626 100%)',
-        padding: '0.35rem 1.5rem',
-        fontSize: '0.8rem',
-        color: '#ffffff',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: '0.5rem',
-        boxShadow: 'inset 0 -1px 3px rgba(0,0,0,0.1)'
-      }}>
-        <div style={{ fontWeight: 700, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
-          <span style={{ color: '#fef08a', fontSize: '0.9rem', whiteSpace: 'nowrap' }}>॥ ॐ श्री गणेशाय नमः ॥</span>
-          <span style={{ opacity: 0.8 }} className="hide-on-mobile">|</span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', whiteSpace: 'nowrap' }}>
-            <MapPin size={13} color="#fef08a" /> उच्छेळी (Uchheli)
-          </span>
-        </div>
+      <div className="top-spiritual-bar">
+        <div className="top-spiritual-container">
+          <div className="topbar-mantra-group">
+            <span className="topbar-mantra">॥ ॐ श्री गणेशाय नमः ॥</span>
+            <span className="topbar-divider">•</span>
+            <span className="topbar-location">
+              <MapPin size={12} color="#fef08a" /> उच्छेळी (Uchheli)
+            </span>
+          </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', fontWeight: 600, flexWrap: 'wrap' }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', whiteSpace: 'nowrap' }}>
-            <Phone size={13} /> 7276703163
-          </span>
-          <span style={{ opacity: 0.8 }}>|</span>
-          <a
-            href="https://www.instagram.com/gart.135/"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: 'inherit', textDecoration: 'none', whiteSpace: 'nowrap' }}
-          >
-            <Instagram size={13} /> gart.135
-          </a>
+          <div className="topbar-contact-group">
+            <a
+              href="tel:7276703163"
+              className="topbar-contact-pill"
+              title="Call Workshop"
+            >
+              <Phone size={12} /> 7276703163
+            </a>
+            <span className="topbar-divider">•</span>
+            <a
+              href="https://www.instagram.com/gart.135/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="topbar-contact-pill"
+              title="Instagram @gart.135"
+            >
+              <Instagram size={12} /> gart.135
+            </a>
+          </div>
         </div>
       </div>
 
@@ -151,7 +147,7 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
       <div style={{
         maxWidth: '1240px',
         margin: '0 auto',
-        padding: '0.8rem 1.5rem',
+        padding: '0.75rem clamp(1rem, 3vw, 1.5rem)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -160,12 +156,12 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
         {/* Brand Logo & Name */}
         <div
           onClick={() => handleNavClick('home')}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer', flexShrink: 1, minWidth: 0 }}
+          style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', cursor: 'pointer', flexShrink: 1, minWidth: 0 }}
         >
           <div style={{
-            width: '48px',
-            height: '48px',
-            borderRadius: '14px',
+            width: '46px',
+            height: '46px',
+            borderRadius: '13px',
             background: 'linear-gradient(135deg, #f97316 0%, #dc2626 100%)',
             border: '2px solid #fbbf24',
             display: 'flex',
@@ -184,9 +180,9 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
           </div>
 
           <div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', flexWrap: 'nowrap' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.45rem', flexWrap: 'nowrap' }}>
               <h1 style={{
-                fontSize: 'clamp(1rem, 2vw, 1.55rem)',
+                fontSize: 'clamp(1.05rem, 2.2vw, 1.55rem)',
                 fontWeight: 900,
                 letterSpacing: '-0.01em',
                 color: '#b91c1c',
@@ -200,7 +196,7 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
                 G.ART
               </span>
             </div>
-            <span style={{ fontSize: 'clamp(0.55rem, 1.5vw, 0.75rem)', color: 'var(--text-secondary)', fontWeight: 600, display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <span style={{ fontSize: 'clamp(0.58rem, 1.5vw, 0.75rem)', color: 'var(--text-secondary)', fontWeight: 600, display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               Shree Ganesh MurtiKala — Uchheli (उच्छेळी)
             </span>
           </div>
@@ -219,13 +215,12 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
             background: 'none',
             border: 'none',
             color: 'var(--text-primary)',
-            padding: '0.5rem',
-            marginRight: '0.5rem',
+            padding: '0.4rem',
             cursor: 'pointer'
           }}
           aria-label="Toggle menu"
         >
-          {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
         </button>
 
         {/* Mobile Nav Menu Dropdown */}
