@@ -46,6 +46,7 @@ export default function App() {
             setActivePage={setActivePage}
             setSelectedMurtiId={setSelectedMurtiId}
             setBookingMurtiId={setBookingMurtiId}
+            currentUser={currentUser}
           />
         )}
 
@@ -54,6 +55,7 @@ export default function App() {
             setActivePage={setActivePage}
             setSelectedMurtiId={setSelectedMurtiId}
             setBookingMurtiId={setBookingMurtiId}
+            currentUser={currentUser}
           />
         )}
 
@@ -62,6 +64,7 @@ export default function App() {
             murtiId={selectedMurtiId}
             setActivePage={setActivePage}
             setBookingMurtiId={setBookingMurtiId}
+            currentUser={currentUser}
           />
         )}
 
@@ -81,6 +84,7 @@ export default function App() {
           <AuthPage
             onLoginSuccess={(user) => setCurrentUser(user)}
             setActivePage={setActivePage}
+            bookingMurtiId={bookingMurtiId}
           />
         )}
 

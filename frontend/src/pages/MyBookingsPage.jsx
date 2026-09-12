@@ -599,7 +599,7 @@ export default function MyBookingsPage({ currentUser, setActivePage }) {
       // Parallel fetch: user bookings & murti catalog for enrichment
       const [bookingsRes, murtisRes] = await Promise.all([
         bookingApi.getMyBookings(currentUser.email),
-        murtiApi.getMurtis().catch(() => ({ data: { murtis: [] } }))
+        murtiApi.getMurtis({ includeUnavailable: true }).catch(() => ({ data: { murtis: [] } }))
       ]);
 
       const map = {};

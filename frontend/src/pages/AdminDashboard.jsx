@@ -19,6 +19,7 @@ export default function AdminDashboard({ currentUser }) {
     height_cm: '',
     width_cm: '',
     weight_kg: '',
+    quantity: 1,
     availability: 'Available'
   });
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -29,7 +30,7 @@ export default function AdminDashboard({ currentUser }) {
   const loadDashboardData = () => {
     setLoading(true);
     Promise.all([
-      murtiApi.getMurtis({ sort: 'newest' }),
+      murtiApi.getMurtis({ sort: 'newest', includeUnavailable: true }),
       bookingApi.getAllBookings()
     ])
       .then(([murtisRes, bookingsRes]) => {
@@ -60,6 +61,7 @@ export default function AdminDashboard({ currentUser }) {
         height_cm: '',
         width_cm: '',
         weight_kg: '',
+        quantity: 1,
         availability: 'Available'
       });
       setSelectedFiles([]);
@@ -211,6 +213,7 @@ export default function AdminDashboard({ currentUser }) {
                 <th style={{ padding: '0.75rem' }}>Deity</th>
                 <th style={{ padding: '0.75rem' }}>Material</th>
                 <th style={{ padding: '0.75rem' }}>Height</th>
+                <th style={{ padding: '0.75rem' }}>Stock</th>
                 <th style={{ padding: '0.75rem' }}>Status</th>
                 <th style={{ padding: '0.75rem', textAlign: 'right' }}>Actions</th>
               </tr>
@@ -222,7 +225,16 @@ export default function AdminDashboard({ currentUser }) {
                   <td style={{ padding: '0.75rem' }}><span className="badge-gold">{m.deity}</span></td>
                   <td style={{ padding: '0.75rem', color: 'var(--text-secondary)' }}>{m.material}</td>
                   <td style={{ padding: '0.75rem', color: 'var(--text-secondary)' }}>{m.height_cm} cm</td>
-                  <td style={{ padding: '0.75rem' }}><span className={`badge-status ${m.availability}`}>{m.availability}</span></td>
+                  <td style={{ padding: '0.75rem', fontWeight: 600 }}>
+                    <span style={{ color: m.available_quantity > 0 ? '#15803d' : '#b91c1c' }}>
+                      {m.available_quantity} / {m.total_quantity}
+                    </span>
+                  </td>
+                  <td style={{ padding: '0.75rem' }}>
+                    <span className={`badge-status ${m.available_quantity > 0 ? m.availability : 'Unavailable'}`}>
+                      {m.available_quantity > 0 ? m.availability : 'Sold Out'}
+                    </span>
+                  </td>
                   <td style={{ padding: '0.75rem', textAlign: 'right' }}>
                     <button
                       onClick={() => handleDeleteMurti(m.id)}
@@ -261,17 +273,40 @@ export default function AdminDashboard({ currentUser }) {
                   <td style={{ padding: '0.75rem', color: 'var(--text-secondary)' }}>{b.event_date || 'N/A'}</td>
                   <td style={{ padding: '0.75rem' }}><span className={`badge-status ${b.status}`}>{b.status}</span></td>
                   <td style={{ padding: '0.75rem', textAlign: 'right' }}>
-                    <select
-                      value={b.status}
-                      onChange={(e) => handleUpdateBookingStatus(b.id, e.target.value)}
-                      className="form-select"
-                      style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem', width: 'auto' }}
-                    >
-                      <option value="Pending">Pending</option>
-                      <option value="Confirmed">Confirmed</option>
-                      <option value="Declined">Declined</option>
-                      <option value="Completed">Completed</option>
-                    </select>
+                    <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end', alignItems: 'center' }}>
+                      {b.status === 'Confirmed' && (
+                        <button
+                          onClick={() => handleUpdateBookingStatus(b.id, 'Completed')}
+                          className="btn-primary"
+                          style={{
+                            padding: '0.35rem 0.8rem',
+                            fontSize: '0.78rem',
+                            background: 'linear-gradient(135deg, #16a34a, #15803d)',
+                            whiteSpace: 'nowrap',
+                            boxShadow: '0 2px 8px rgba(22, 163, 74, 0.25)'
+                          }}
+                          title="Mark this sculpture as handed over to the customer"
+                        >
+                          🤝 Handover Murti
+                        </button>
+                      )}
+                      {b.status === 'Completed' && (
+                        <span style={{ fontSize: '0.8rem', color: '#16a34a', fontWeight: 700, whiteSpace: 'nowrap' }}>
+                          ✓ Handed Over
+                        </span>
+                      )}
+                      <select
+                        value={b.status}
+                        onChange={(e) => handleUpdateBookingStatus(b.id, e.target.value)}
+                        className="form-select"
+                        style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem', width: 'auto' }}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="Declined">Declined</option>
+                        <option value="Completed">Completed (Handed Over)</option>
+                      </select>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -370,6 +405,20 @@ export default function AdminDashboard({ currentUser }) {
                   value={newMurti.weight_kg}
                   onChange={(e) => setNewMurti({ ...newMurti, weight_kg: e.target.value })}
                   placeholder="8.5"
+                  className="form-input"
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.4rem' }}>
+                  Total Quantity (Stock Pieces) *
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  required
+                  value={newMurti.quantity}
+                  onChange={(e) => setNewMurti({ ...newMurti, quantity: e.target.value })}
+                  placeholder="1"
                   className="form-input"
                 />
               </div>

@@ -3,7 +3,7 @@ import { Search, Sparkles, Filter, SlidersHorizontal, RefreshCw } from 'lucide-r
 import { murtiApi } from '../services/api';
 import MurtiCard from '../components/MurtiCard';
 
-export default function GalleryPage({ setSelectedMurtiId, setBookingMurtiId, setActivePage }) {
+export default function GalleryPage({ setSelectedMurtiId, setBookingMurtiId, setActivePage, currentUser }) {
   const [query, setQuery] = useState('');
   const [deity, setDeity] = useState('');
   const [material, setMaterial] = useState('');
@@ -189,8 +189,16 @@ export default function GalleryPage({ setSelectedMurtiId, setBookingMurtiId, set
             <MurtiCard
               key={m.id}
               murti={m}
+              currentUser={currentUser}
               onSelect={(id) => { setSelectedMurtiId(id); setActivePage('detail'); }}
-              onBook={(id) => { setBookingMurtiId(id); setActivePage('book'); }}
+              onBook={(id) => {
+                setBookingMurtiId(id);
+                if (!currentUser) {
+                  setActivePage('auth');
+                } else {
+                  setActivePage('book');
+                }
+              }}
             />
           ))}
         </div>

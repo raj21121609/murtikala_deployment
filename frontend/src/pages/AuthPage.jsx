@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ShieldCheck, Lock, Mail, User, Phone, KeyRound } from 'lucide-react';
 import { registerUser, loginUser, loginWithGoogle } from '../services/firebaseAuth';
 
-export default function AuthPage({ onLoginSuccess, setActivePage }) {
+export default function AuthPage({ onLoginSuccess, setActivePage, bookingMurtiId }) {
   const [mode, setMode] = useState('login'); // 'login' | 'register'
 
   // Form State
@@ -46,6 +46,8 @@ export default function AuthPage({ onLoginSuccess, setActivePage }) {
 
       if (user.role === 'admin') {
         setActivePage('admin');
+      } else if (bookingMurtiId) {
+        setActivePage('book');
       } else {
         setActivePage('gallery');
       }
@@ -68,6 +70,8 @@ export default function AuthPage({ onLoginSuccess, setActivePage }) {
       }
       if (user.role === 'admin') {
         setActivePage('admin');
+      } else if (bookingMurtiId) {
+        setActivePage('book');
       } else {
         setActivePage('gallery');
       }
@@ -81,6 +85,23 @@ export default function AuthPage({ onLoginSuccess, setActivePage }) {
   return (
     <div className="section-padding" style={{ maxWidth: '540px', margin: '3rem auto', padding: '0 1.5rem' }}>
       <div className="glass-card animate-fade-in" style={{ padding: '2.5rem' }}>
+
+        {/* Booking Notification Banner */}
+        {bookingMurtiId && (
+          <div style={{
+            background: '#fffbeb',
+            border: '1px solid #fde68a',
+            color: '#92400e',
+            borderRadius: '10px',
+            padding: '0.75rem 1rem',
+            fontSize: '0.88rem',
+            textAlign: 'center',
+            marginBottom: '1.5rem',
+            fontWeight: 600
+          }}>
+            🔒 Please sign in or register to complete your Murti reservation.
+          </div>
+        )}
 
         {/* Header Icon & Title */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Sparkles, Calendar, ArrowRight } from 'lucide-react';
 
-export default function MurtiCard({ murti, onSelect, onBook }) {
+export default function MurtiCard({ murti, onSelect, onBook, currentUser }) {
   const imageUrl = murti.primary_image
     ? (murti.primary_image.startsWith('http') || murti.primary_image.startsWith('data:') ? murti.primary_image : `/uploads/${murti.primary_image}`)
     : 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=600&q=80';
@@ -63,9 +63,16 @@ export default function MurtiCard({ murti, onSelect, onBook }) {
       <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
           <span className="badge-gold">{murti.deity}</span>
-          <span className={`badge-status ${murti.availability}`}>
-            {murti.availability}
-          </span>
+          <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+            {murti.available_quantity > 0 && (
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#b45309', background: '#fef3c7', padding: '0.15rem 0.5rem', borderRadius: '6px', border: '1px solid #fde68a' }}>
+                {murti.available_quantity} in stock
+              </span>
+            )}
+            <span className={`badge-status ${murti.available_quantity > 0 ? murti.availability : 'Unavailable'}`}>
+              {murti.available_quantity > 0 ? murti.availability : 'Sold Out'}
+            </span>
+          </div>
         </div>
 
         <h3
@@ -120,13 +127,20 @@ export default function MurtiCard({ murti, onSelect, onBook }) {
             Details
           </button>
 
-          {murti.availability === 'Available' ? (
+          {murti.availability === 'Available' && (murti.available_quantity === undefined || murti.available_quantity > 0) ? (
             <button
               onClick={() => onBook(murti.id)}
               className="btn-primary"
-              style={{ flex: 1, justifyContent: 'center', padding: '0.6rem', fontSize: '0.85rem' }}
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                padding: '0.6rem',
+                fontSize: '0.85rem',
+                background: !currentUser ? 'linear-gradient(135deg, #ea580c, #c2410c)' : undefined
+              }}
+              title={!currentUser ? 'Login to reserve your Murti' : 'Book this Murti'}
             >
-              Book Murti <ArrowRight size={14} />
+              {currentUser ? 'Book Murti' : 'Login to Book'} <ArrowRight size={14} />
             </button>
           ) : (
             <button
@@ -134,7 +148,7 @@ export default function MurtiCard({ murti, onSelect, onBook }) {
               className="btn-secondary"
               style={{ flex: 1, justifyContent: 'center', opacity: 0.5, cursor: 'not-allowed', padding: '0.6rem', fontSize: '0.85rem' }}
             >
-              Booked
+              Sold Out
             </button>
           )}
         </div>

@@ -9,7 +9,29 @@ export const murtiApi = {
       const q = query(collection(db, 'murtis'));
       
       const querySnapshot = await getDocs(q);
-      let murtis = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      let murtis = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        const total = data.total_quantity !== undefined 
+          ? Number(data.total_quantity) 
+          : (data.quantity !== undefined ? Number(data.quantity) : 1);
+        const available = data.available_quantity !== undefined 
+          ? Number(data.available_quantity) 
+          : (data.availability === 'Booked' || data.availability === 'Unavailable' || data.availability === 'Sold Out' ? 0 : total);
+        
+        return {
+          id: doc.id,
+          ...data,
+          total_quantity: total,
+          available_quantity: available,
+          availability: available > 0 ? (data.availability || 'Available') : 'Sold Out'
+        };
+      });
+
+      // Unless includeUnavailable is true (for admin or past booking lookups),
+      // only show murtis with available stock to customers
+      if (!params.includeUnavailable) {
+        murtis = murtis.filter(m => m.available_quantity > 0 && m.availability === 'Available');
+      }
 
       // Client-side text search replacing AI NLP search
       if (params.q) {
@@ -46,7 +68,23 @@ export const murtiApi = {
       const docRef = doc(db, 'murtis', id);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        return { data: { id: docSnap.id, ...docSnap.data() } };
+        const data = docSnap.data();
+        const total = data.total_quantity !== undefined 
+          ? Number(data.total_quantity) 
+          : (data.quantity !== undefined ? Number(data.quantity) : 1);
+        const available = data.available_quantity !== undefined 
+          ? Number(data.available_quantity) 
+          : (data.availability === 'Booked' || data.availability === 'Unavailable' || data.availability === 'Sold Out' ? 0 : total);
+
+        return { 
+          data: { 
+            id: docSnap.id, 
+            ...data,
+            total_quantity: total,
+            available_quantity: available,
+            availability: available > 0 ? (data.availability || 'Available') : 'Sold Out'
+          } 
+        };
       } else {
         throw new Error("Murti not found");
       }
@@ -93,6 +131,8 @@ export const murtiApi = {
         }
       }
 
+      const totalQuantity = Math.max(1, parseInt(murtiDataInput.quantity, 10) || 1);
+
       const murtiData = {
         name: murtiDataInput.name,
         deity: murtiDataInput.deity,
@@ -100,7 +140,9 @@ export const murtiApi = {
         height_cm: Number(murtiDataInput.height_cm),
         width_cm: Number(murtiDataInput.width_cm) || null,
         weight_kg: Number(murtiDataInput.weight_kg) || null,
-        availability: murtiDataInput.availability,
+        total_quantity: totalQuantity,
+        available_quantity: totalQuantity,
+        availability: 'Available',
         description: murtiDataInput.description,
         price: Number(murtiDataInput.price) || null,
         primary_image: imageUrls.length > 0 ? imageUrls[0] : null,
@@ -199,7 +241,59 @@ export const bookingApi = {
   updateStatus: async (id, status) => {
     try {
       const bookingRef = doc(db, 'bookings', id);
+      const bookingSnap = await getDoc(bookingRef);
+      if (!bookingSnap.exists()) {
+        throw new Error("Booking not found");
+      }
+      const bookingData = bookingSnap.data();
+      const oldStatus = (bookingData.status || '').toLowerCase();
+      const newStatus = (status || '').toLowerCase();
+
+      // Update booking status
       await updateDoc(bookingRef, { status });
+
+      // If this booking has an associated murti_id, sync murti quantity and availability
+      if (bookingData.murti_id) {
+        try {
+          const murtiRef = doc(db, 'murtis', bookingData.murti_id);
+          const murtiSnap = await getDoc(murtiRef);
+          if (murtiSnap.exists()) {
+            const murtiData = murtiSnap.data();
+            const total = murtiData.total_quantity !== undefined 
+              ? Number(murtiData.total_quantity) 
+              : (murtiData.quantity !== undefined ? Number(murtiData.quantity) : 1);
+            let currentAvailable = murtiData.available_quantity !== undefined 
+              ? Number(murtiData.available_quantity) 
+              : (murtiData.availability === 'Booked' || murtiData.availability === 'Sold Out' ? 0 : total);
+
+            let updatedAvailable = currentAvailable;
+            let stockChanged = false;
+
+            // Transitioning INTO Confirmed: decrement stock
+            if (newStatus === 'confirmed' && oldStatus !== 'confirmed') {
+              updatedAvailable = Math.max(0, currentAvailable - 1);
+              stockChanged = true;
+            }
+            // Transitioning OUT of Confirmed (e.g. Declined, Cancelled, Pending): restore stock
+            else if (oldStatus === 'confirmed' && newStatus !== 'confirmed') {
+              updatedAvailable = Math.min(total, currentAvailable + 1);
+              stockChanged = true;
+            }
+
+            if (stockChanged) {
+              const newAvailability = updatedAvailable > 0 ? 'Available' : 'Sold Out';
+              await updateDoc(murtiRef, {
+                total_quantity: total,
+                available_quantity: updatedAvailable,
+                availability: newAvailability
+              });
+            }
+          }
+        } catch (murtiErr) {
+          console.warn("Could not sync murti stock for booking:", murtiErr);
+        }
+      }
+
       return { data: { id, status } };
     } catch (err) {
       console.error(err);

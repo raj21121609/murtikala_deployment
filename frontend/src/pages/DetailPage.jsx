@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, CheckCircle, ArrowRight, ShieldCheck, Ruler, Weight } from 'lucide-react';
 import { murtiApi } from '../services/api';
 
-export default function DetailPage({ murtiId, setActivePage, setBookingMurtiId }) {
+export default function DetailPage({ murtiId, setActivePage, setBookingMurtiId, currentUser }) {
   const [murti, setMurti] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedImg, setSelectedImg] = useState(null);
@@ -101,9 +101,16 @@ export default function DetailPage({ murtiId, setActivePage, setBookingMurtiId }
 
         {/* Right: Specifications & Booking action */}
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', marginBottom: '0.5rem' }}>
+          <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
             <span className="badge-gold">{murti.deity}</span>
-            <span className={`badge-status ${murti.availability}`}>{murti.availability}</span>
+            {murti.available_quantity > 0 && (
+              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#b45309', background: '#fef3c7', padding: '0.2rem 0.6rem', borderRadius: '6px', border: '1px solid #fde68a' }}>
+                {murti.available_quantity} available in stock
+              </span>
+            )}
+            <span className={`badge-status ${murti.available_quantity > 0 ? murti.availability : 'Unavailable'}`}>
+              {murti.available_quantity > 0 ? murti.availability : 'Sold Out'}
+            </span>
           </div>
 
           <h1 style={{ fontSize: '2.2rem', color: 'var(--text-primary)', marginBottom: '1rem' }}>
@@ -116,7 +123,7 @@ export default function DetailPage({ murtiId, setActivePage, setBookingMurtiId }
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
             gap: '1rem',
             padding: '1.2rem',
             background: 'var(--bg-secondary)',
@@ -140,19 +147,41 @@ export default function DetailPage({ murtiId, setActivePage, setBookingMurtiId }
               <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Weight</span>
               <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '1rem' }}>{murti.weight_kg ? `${murti.weight_kg} kg` : 'N/A'}</div>
             </div>
+            <div>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Stock Available</span>
+              <div style={{ fontWeight: 700, color: murti.available_quantity > 0 ? '#15803d' : '#b91c1c', fontSize: '1rem' }}>
+                {murti.available_quantity !== undefined ? `${murti.available_quantity} / ${murti.total_quantity || 1}` : 'Available'}
+              </div>
+            </div>
           </div>
 
-          {murti.availability === 'Available' ? (
-            <button
-              onClick={() => { setBookingMurtiId(murti.id); setActivePage('book'); }}
-              className="btn-primary"
-              style={{ width: '100%', justifyContent: 'center', padding: '0.9rem', fontSize: '1.05rem' }}
-            >
-              Book This Murti Now <ArrowRight size={18} />
-            </button>
+          {murti.availability === 'Available' && (murti.available_quantity === undefined || murti.available_quantity > 0) ? (
+            currentUser ? (
+              <button
+                onClick={() => { setBookingMurtiId(murti.id); setActivePage('book'); }}
+                className="btn-primary"
+                style={{ width: '100%', justifyContent: 'center', padding: '0.9rem', fontSize: '1.05rem' }}
+              >
+                Book This Murti Now <ArrowRight size={18} />
+              </button>
+            ) : (
+              <button
+                onClick={() => { setBookingMurtiId(murti.id); setActivePage('auth'); }}
+                className="btn-primary"
+                style={{
+                  width: '100%',
+                  justifyContent: 'center',
+                  padding: '0.9rem',
+                  fontSize: '1.05rem',
+                  background: 'linear-gradient(135deg, #ea580c, #c2410c)'
+                }}
+              >
+                Login to Book This Murti <ArrowRight size={18} />
+              </button>
+            )
           ) : (
-            <button disabled className="btn-secondary" style={{ width: '100%', justifyContent: 'center', opacity: 0.5, cursor: 'not-allowed' }}>
-              Currently Unavailable / Booked
+            <button disabled className="btn-secondary" style={{ width: '100%', justifyContent: 'center', opacity: 0.5, cursor: 'not-allowed', padding: '0.9rem' }}>
+              Currently Unavailable / Sold Out
             </button>
           )}
         </div>

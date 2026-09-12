@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, ArrowLeft, CheckCircle2, Copy } from 'lucide-react';
+import { ShoppingBag, ArrowLeft, CheckCircle2, Copy, Lock } from 'lucide-react';
 import { murtiApi, bookingApi } from '../services/api';
 
 export default function BookingPage({ murtiId, setActivePage, currentUser }) {
@@ -32,6 +32,12 @@ export default function BookingPage({ murtiId, setActivePage, currentUser }) {
     setSubmitting(true);
     setErrorMsg('');
 
+    if (murti && (murti.available_quantity <= 0 || murti.availability === 'Sold Out')) {
+      setErrorMsg('Sorry, this murti has just sold out and can no longer be booked.');
+      setSubmitting(false);
+      return;
+    }
+
     try {
       const res = await bookingApi.createBooking({
         murti_id: murtiId,
@@ -52,6 +58,59 @@ export default function BookingPage({ murtiId, setActivePage, currentUser }) {
 
   if (loading) {
     return <div style={{ textAlign: 'center', padding: '5rem', color: 'var(--text-muted)' }}>Loading booking details...</div>;
+  }
+
+  if (!currentUser) {
+    return (
+      <div className="section-padding" style={{ maxWidth: '650px', margin: '3rem auto', padding: '0 1.5rem' }}>
+        <div className="glass-card animate-fade-in" style={{ padding: '3.5rem 2rem', textAlign: 'center' }}>
+          <div style={{
+            width: '64px',
+            height: '64px',
+            borderRadius: '50%',
+            background: 'rgba(234, 88, 12, 0.12)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 1.5rem auto'
+          }}>
+            <Lock size={32} color="#ea580c" />
+          </div>
+          <h2 style={{ fontSize: '1.8rem', color: '#78350f', marginBottom: '0.8rem', fontWeight: 800 }}>
+            Login Required to Book
+          </h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: '1.6', marginBottom: '2rem' }}>
+            Please sign in or create an account to book <strong>{murti?.name || 'this Ganpati sculpture'}</strong>. Having an account lets you track your booking approval and live festival handover status!
+          </p>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button onClick={() => setActivePage('auth')} className="btn-primary" style={{ padding: '0.8rem 2rem' }}>
+              Sign In / Register
+            </button>
+            <button onClick={() => setActivePage('gallery')} className="btn-secondary">
+              Back to Gallery
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (murti && (murti.available_quantity <= 0 || murti.availability === 'Sold Out')) {
+    return (
+      <div className="section-padding" style={{ maxWidth: '650px', margin: '3rem auto', padding: '0 1.5rem' }}>
+        <div className="glass-card animate-fade-in" style={{ padding: '3rem 2rem', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '1.8rem', color: '#b91c1c', marginBottom: '1rem' }}>
+            Murti Currently Sold Out
+          </h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', marginBottom: '2rem' }}>
+            We apologize, but all crafted pieces of <strong>{murti.name}</strong> have already been reserved and confirmed.
+          </p>
+          <button onClick={() => setActivePage('gallery')} className="btn-primary">
+            Explore Other Murtis
+          </button>
+        </div>
+      </div>
+    );
   }
 
   if (bookingSuccess) {
