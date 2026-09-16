@@ -181,7 +181,7 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
 
           <div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.45rem', flexWrap: 'nowrap' }}>
-              <h1 style={{
+              <span style={{
                 fontSize: 'clamp(1.05rem, 2.2vw, 1.55rem)',
                 fontWeight: 900,
                 letterSpacing: '-0.01em',
@@ -191,7 +191,7 @@ export default function Navbar({ activePage, setActivePage, currentUser, onLogou
                 whiteSpace: 'nowrap'
               }}>
                 श्री गणेश मूर्तिकला
-              </h1>
+              </span>
               <span style={{ fontSize: '0.78rem', color: '#ea580c', fontWeight: 800 }}>
                 G.ART
               </span>
