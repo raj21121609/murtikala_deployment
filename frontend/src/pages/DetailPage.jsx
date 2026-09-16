@@ -92,7 +92,7 @@ export default function DetailPage({ murtiId, setActivePage, setBookingMurtiId, 
                     opacity: selectedImg === img ? 1 : 0.6
                   }}
                 >
-                  <img src={img.startsWith('http') || img.startsWith('data:') ? img : `/uploads/${img}`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={img.startsWith('http') || img.startsWith('data:') ? img : `/uploads/${img}`} alt={`${murti.name} – view ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
               ))}
             </div>
